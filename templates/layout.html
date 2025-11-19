@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kalakar Sahayak{% endblock %}</title>
+    <meta name="google" content="notranslate">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+            <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: padding 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #3E2723;
+            z-index: 102;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: #D2691E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon .material-icons {
+            color: white;
+            font-size: 28px;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3E2723;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 0 0;
+            position: relative;
+            height: 44px;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:not(.join-btn)::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D2691E;
+            transition: width 0.3s ease;
+        }
+
+        .nav a:not(.join-btn):hover::after,
+        .nav a:not(.join-btn).active::after {
+            width: 100%;
+        }
+
+        .nav a.active {
+            color: #D2691E;
+            font-weight: 600;
+        }
+
+        .join-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 24px;
+            min-width: 90px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            background: #D2691E;
+            font-size: 15px;
+            line-height: 1;
+            transition: background 0.3s ease;
+        }
+
+        .join-btn:hover {
+            background: #C85A0F;
+        }
+
+        .header.scrolled {
+            padding: 15px 60px;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 102;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #3E2723;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Language Dropdown Styling */
+        .language-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-dropdown-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid rgba(62, 39, 35, 0.2);
+            color: #3E2723;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .language-dropdown-button:hover {
+            background: rgba(210, 105, 30, 0.1);
+            border-color: #D2691E;
+        }
+
+        .language-dropdown-button .material-icons {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .language-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border: 1px solid rgba(62, 39, 35, 0.15);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            min-width: 200px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .language-dropdown-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .language-dropdown-menu::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        .language-dropdown-menu::-webkit-scrollbar-thumb {
+            background: #D2691E;
+            border-radius: 10px;
+        }
+
+        .language-dropdown-menu::-webkit-scrollbar-thumb:hover {
+            background: #C85A0F;
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #3E2723;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background: rgba(210, 105, 30, 0.1);
+            color: #D2691E;
+            padding-left: 20px;
+        }
+
+        .language-option.selected {
+            background: rgba(210, 105, 30, 0.15);
+            color: #D2691E;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Hide Google Translate elements */
+        #google_translate_element {
+            display: none;
+        }
+
+        iframe,
+        .goog-logo-link,
+        .goog-te-gadget {
+            display: none !important;
+        }
+
+        body>.skiptranslate {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 30px;
+            }
+
+            .header.scrolled {
+                padding: 12px 30px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-icon .material-icons {
+                font-size: 24px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0;
+                padding: 100px 40px 40px;
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+                transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                overflow-y: auto;
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav a {
+                width: 100%;
+                color: #3E2723;
+                font-size: 16px;
+                height: auto;
+                padding: 16px 0;
+                justify-content: flex-start;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            }
+
+            .nav a:not(.join-btn)::after {
+                display: none;
+            }
+
+            .nav a.active {
+                color: #D2691E;
+            }
+
+            .join-btn {
+                margin-top: 20px;
+                width: 100%;
+                justify-content: center !important;
+                text-align: center;
+                padding: 14px 24px;
+                border-bottom: none !important;
+            }
+
+            .language-dropdown {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .language-dropdown-button {
+                width: 100%;
+                justify-content: space-between;
+                padding: 12px 16px;
+            }
+
+            .language-dropdown-menu {
+                position: relative;
+                top: 8px;
+                right: auto;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 20px;
+            }
+
+            .header.scrolled {
+                padding: 10px 20px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+            }
+
+            .nav {
+                width: 260px;
+                padding: 80px 30px 30px;
+            }
+        }
+
+        .footer {
+            background: #815331;
+            color: white;
+            padding: 60px 0 0;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 60px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+            background: #D4AF37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon .material-icons {
+            color: #815331;
+            font-size: 30px;
+        }
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .brand-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 350px;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .footer-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #D4AF37;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            background: #D4AF37;
+            transform: translateY(-3px);
+        }
+
+        .social-icon .material-icons {
+            font-size: 20px;
+            color: white;
+        }
+
+        .newsletter-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 25px 60px;
+            text-align: center;
+        }
+
+        .copyright {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .heart {
+            color: #FF6B6B;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.1);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                padding: 0 40px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 35px;
+                padding: 0 30px 25px;
+            }
+
+            .footer {
+                padding: 40px 0 0;
+            }
+
+            .footer-bottom {
+                padding: 20px 30px;
+            }
+
+            .brand-description {
+                max-width: 100%;
+            }
+        }
+
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            z-index: 1000;
+
+            left: 0;
+
+            top: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            overflow: auto;
+
+            background-color: rgba(0, 0, 0, 0.6);
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        /* Modal Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(62, 39, 35, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: linear-gradient(135deg, #FFFAF0 0%, #FAF5EB 100%);
+            padding: 40px;
+            border: 2px solid rgba(210, 105, 30, 0.2);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(62, 39, 35, 0.2);
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 32px;
+            font-weight: 300;
+            color: #8B6547;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #D2691E;
+            transform: rotate(90deg);
+        }
+
+        /* Modal Heading */
+        .modal-content h2 {
+            color: #3E2723;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #3E2723;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Textarea */
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(210, 105, 30, 0.2);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: #3E2723;
+            background: white;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #D2691E;
+            box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+        }
+
+        .form-group textarea::placeholder {
+            color: rgba(62, 39, 35, 0.5);
+        }
+
+        /* File Input */
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed rgba(210, 105, 30, 0.3);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #3E2723;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #D2691E;
+            background: rgba(210, 105, 30, 0.05);
+        }
+
+        .form-group input[type="file"]::file-selector-button {
+            background: #D2691E;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .form-group input[type="file"]::file-selector-button:hover {
+            background: #C85A0F;
+        }
+
+        /* Submit Button */
+        .submit-post-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: #D2691E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .submit-post-btn:hover {
+            background: #C85A0F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(210, 105, 30, 0.3);
+        }
+
+        .submit-post-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 25px;
+                max-width: 95%;
+            }
+
+            .modal-content h2 {
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+
+            .close-btn {
+                top: 15px;
+                right: 20px;
+                font-size: 28px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group textarea {
+                min-height: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 25px 20px;
+            }
+
+            .modal-content h2 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                font-size: 14px;
+            }
+
+            .form-group textarea,
+            .form-group input[type="file"] {
+                font-size: 14px;
+            }
+
+            .submit-post-btn {
+                font-size: 15px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+
+    <script type="text/javascript">
+        function autoTranslate(lang) {
+            // Update button text
+            const button = document.getElementById('language-dropdown-button');
+            const selectedLang = document.querySelector(`[data-lang="${lang}"]`);
+            if (button && selectedLang) {
+                const langText = selectedLang.textContent.trim();
+                button.innerHTML = `
+                    <span>${langText}</span>
+                    <span class="material-icons notranslate">translate</span>
+                `;
+            }
+
+            // Close dropdown
+            document.getElementById('language-dropdown-menu').classList.add('hidden');
+
+            // Trigger Google Translate
+            const interval = setInterval(() => {
+                const select = document.querySelector("select.goog-te-combo");
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event('change'));
+                    clearInterval(interval);
+                }
+            }, 300);
+        }
+
+        // Toggle dropdown
+        function toggleLanguageDropdown() {
+            const menu = document.getElementById('language-dropdown-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('language-dropdown');
+            if (dropdown && !dropdown.contains(event.target)) {
+                document.getElementById('language-dropdown-menu').classList.add('hidden');
+            }
+        });
+    </script>
+    {% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css') }}">
+    {% endblock %}
+</head>
+
+<body>
+    <div id="page-loader" class="loader-wrapper">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-mandala"></div>
+            <div class="loader-center"></div>
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot"></div>
+            <div class="loader-text">Loading</div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <span class="material-icons notranslate">palette</span>
+            </div>
+            <span class="logo-text notranslate">Kalakar Sahayak</span>
+        </div>
+
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav class="nav">
+            <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+            <a href="{{ url_for('about') }}"
+                class="{% if request.path.startswith('/about') %}active{% endif %}">About</a>
+            <a href="{{ url_for('tools') }}" class="{% if request.path.startswith('/tools') %}active{% endif %}">AI
+                Tools</a>
+            <a href="{{ url_for('marketplace') }}"
+                class="{% if request.path.startswith('/marketplace') %}active{% endif %}">Marketplace</a>
+            <a href="{{ url_for('studio') }}" class="{% if request.path.startswith('/studio') %}active{% endif %}">My
+                Studio</a>
+            <a href="{{ url_for('community') }}"
+                class="{% if request.path.startswith('/community') %}active{% endif %}">Community</a>
+            <a href="{{ url_for('contact') }}"
+                class="{% if request.path.startswith('/contact') %}active{% endif %}">Contact</a>
+
+            <!-- Language Dropdown -->
+            <div id="language-dropdown" class="language-dropdown notranslate">
+                <button id="language-dropdown-button" class="language-dropdown-button"
+                    onclick="toggleLanguageDropdown()">
+                    <span>English</span>
+                    <span class="material-icons notranslate">translate</span>
+                </button>
+
+                <div id="language-dropdown-menu" class="language-dropdown-menu hidden">
+                    <!-- English -->
+                    <div class="language-option selected" data-lang="en" onclick="autoTranslate('en')">
+                        <span>English</span>
+                    </div>
+
+                    <!-- Indian Languages -->
+                    <div class="language-option" data-lang="hi" onclick="autoTranslate('hi')">
+                        <span>हिंदी (Hindi)</span>
+                    </div>
+                    <div class="language-option" data-lang="bn" onclick="autoTranslate('bn')">
+                        <span>বাংলা (Bengali)</span>
+                    </div>
+                    <div class="language-option" data-lang="ta" onclick="autoTranslate('ta')">
+                        <span>தமிழ் (Tamil)</span>
+                    </div>
+                    <div class="language-option" data-lang="te" onclick="autoTranslate('te')">
+                        <span>తెలుగు (Telugu)</span>
+                    </div>
+                    <div class="language-option" data-lang="mr" onclick="autoTranslate('mr')">
+                        <span>मराठी (Marathi)</span>
+                    </div>
+                    <div class="language-option" data-lang="gu" onclick="autoTranslate('gu')">
+                        <span>ગુજરાતી (Gujarati)</span>
+                    </div>
+                    <div class="language-option" data-lang="kn" onclick="autoTranslate('kn')">
+                        <span>ಕನ್ನಡ (Kannada)</span>
+                    </div>
+                    <div class="language-option" data-lang="ml" onclick="autoTranslate('ml')">
+                        <span>മലയാളം (Malayalam)</span>
+                    </div>
+                    <div class="language-option" data-lang="pa" onclick="autoTranslate('pa')">
+                        <span>ਪੰਜਾਬੀ (Punjabi)</span>
+                    </div>
+                    <div class="language-option" data-lang="ur" onclick="autoTranslate('ur')">
+                        <span>اردو (Urdu)</span>
+                    </div>
+                    <div class="language-option" data-lang="or" onclick="autoTranslate('or')">
+                        <span>ଓଡ଼ିଆ (Odia)</span>
+                    </div>
+                    <div class="language-option" data-lang="as" onclick="autoTranslate('as')">
+                        <span>অসমীয়া (Assamese)</span>
+                    </div>
+                    <div class="language-option" data-lang="mai" onclick="autoTranslate('mai')">
+                        <span>मैथिली (Maithili)</span>
+                    </div>
+                    <div class="language-option" data-lang="sa" onclick="autoTranslate('sa')">
+                        <span>संस्कृत (Sanskrit)</span>
+                    </div>
+                    <div class="language-option" data-lang="sd" onclick="autoTranslate('sd')">
+                        <span>سنڌي (Sindhi)</span>
+                    </div>
+                    <div class="language-option" data-lang="kok" onclick="autoTranslate('kok')">
+                        <span>कोंकणी (Konkani)</span>
+                    </div>
+                    <div class="language-option" data-lang="ne" onclick="autoTranslate('ne')">
+                        <span>नेपाली (Nepali)</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Google Translate Element (Hidden) -->
+    <div id="google_translate_element"></div>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="brand-header">
+                    <div class="brand-icon">
+                        <span class="material-icons notranslate">palette</span>
+                    </div>
+                    <span class="brand-name notranslate">Kalakar Sahayak</span>
+                </div>
+                <p class="brand-description">
+                    Empowering traditional artisans with modern technology while preserving India's rich cultural
+                    heritage.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/about">About Us</a>
+                    <a href="#tools">AI Tools</a>
+                    <a href="/marketplace">Marketplace</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Support</h3>
+                <div class="footer-links">
+                    <a href="/community">Community</a>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#help">Help Center</a>
+                    <a href="#privacy">Privacy Policy</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Connect With Us</h3>
+                <div class="social-links">
+                    <div class="social-icon">
+                        <span class="material-icons notranslate">facebook</span>
+                    </div>
+                    <div class="social-icon">
+                        <span class="material-icons notranslate">camera_alt</span>
+                    </div>
+                    <div class="social-icon">
+                        <span class="material-icons notranslate">chat</span>
+                    </div>
+                    <div class="social-icon">
+                        <span class="material-icons notranslate">mail</span>
+                    </div>
+                </div>
+                <p class="newsletter-text">
+                    Subscribe to our newsletter for updates and artisan stories.
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">
+                © 2025 <span class="notranslate">Kalakar Sahayak</span>. All rights reserved. Made with <span
+                    class="heart">❤</span> for Indian artisans.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('.nav');
+        const header = document.querySelector('.header');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        hamburger.addEventListener('click', function () {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    hamburger.classList.remove('active');
+                    nav.classList.remove('active');
+                }
+            });
+        });
+
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        document.addEventListener('click', function (event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideNav = nav.contains(event.target);
+                const isClickOnHamburger = hamburger.contains(event.target);
+
+                if (!isClickInsideNav && !isClickOnHamburger && nav.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    nav.classList.remove('active');
+                }
+            }
+        });
+    </script>
+
+    <!-- Google Translate API Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,bn,ta,te,mr,gu,kn,ml,pa,ur,or,as,mai,sa,sd,kok,ne',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script defer type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+        </script>
+
+    <!-- Post Creation Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Create a New Post</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label for="postDescription">Share your thoughts...</label>
+                    <textarea id="postDescription" name="description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="postImage">Upload a photo</label>
+                    <input type="file" id="postImage" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="submit-post-btn">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/shared_modals.js') }}"></script>
+    <script>
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('page-loader');
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

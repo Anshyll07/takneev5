@@ -1,0 +1,6 @@
+Flask
+google-generativeai
+mysql-connector-python
+qrcode
+colorama
+Pillow
