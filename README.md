@@ -33,7 +33,7 @@ takneev5 is a web application designed for artists to showcase and sell their ar
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/takneev5.git
+    git clone [https://github.com/Anshyll07/takneev5.git]
     cd takneev5
     ```
 
